@@ -1,0 +1,7 @@
+# Third-party resources / 第三方资源
+
+This repository is a modified copy of [Bryan-Cyf/SuperShortLink](https://github.com/Bryan-Cyf/SuperShortLink). The original copyright and MIT license are retained in [LICENSE](LICENSE). Existing assets under `media/` and `src/SuperShortLink/wwwroot/lib/` came from that upstream repository; they are not newly authored by this fork.
+
+The bundled `wwwroot/lib/` directory includes third-party distributions such as [Vue](https://github.com/vuejs/core), [Element UI](https://github.com/ElemeFE/element), [Axios](https://github.com/axios/axios), [Bootstrap](https://github.com/twbs/bootstrap), [jQuery](https://github.com/jquery/jquery), [ECharts](https://github.com/apache/echarts), [Moment.js](https://github.com/moment/moment), [Font Awesome](https://github.com/FortAwesome/Font-Awesome), and [Material Design Iconic Font](https://github.com/zavoloklom/material-design-iconic-font). Refer to each upstream project and its license for the applicable version and component (fonts and styles may have different licenses).
+
+The login background image and other upstream media have no separate provenance record in this repository. Retaining the original project's MIT license and attribution does not independently verify rights to every bundled third-party asset. If redistributing assets separately or using them commercially, review their provenance and replace any asset whose rights cannot be confirmed.

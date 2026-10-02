@@ -1,0 +1,77 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>d186dde5-e8ce-46e6-98b8-f4df86615d92</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>..\..</DockerfileContext>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\.editorconfig" Link=".editorconfig" />
+	  <None Include="wwwroot\lib\axios\axios.min.js" />
+	  <None Include="wwwroot\lib\axios\axios.min.map" />
+	  <None Include="wwwroot\lib\bootstrap-v4-rtl\js\bootstrap.js" />
+	  <None Include="wwwroot\lib\bootstrap-v4-rtl\js\bootstrap.js.map" />
+	  <None Include="wwwroot\lib\element-ui\index.js" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.svg" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.woff2" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\less\animated.less" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\less\bordered-pulled.less" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\less\core.less" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\less\fixed-width.less" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\less\font-awesome.less" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\less\icons.less" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\less\larger.less" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\less\list.less" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\less\mixins.less" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\less\path.less" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\less\rotated-flipped.less" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\less\screen-reader.less" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\less\stacked.less" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\less\variables.less" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\scss\font-awesome.scss" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\scss\_animated.scss" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\scss\_bordered-pulled.scss" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\scss\_core.scss" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\scss\_fixed-width.scss" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\scss\_icons.scss" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\scss\_larger.scss" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\scss\_list.scss" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\scss\_mixins.scss" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\scss\_path.scss" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\scss\_rotated-flipped.scss" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\scss\_screen-reader.scss" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\scss\_stacked.scss" />
+	  <None Include="wwwroot\lib\login\fonts\font-awesome-4.7.0\scss\_variables.scss" />
+	  <None Include="wwwroot\lib\login\fonts\iconic\fonts\Material-Design-Iconic-Font.svg" />
+	  <None Include="wwwroot\lib\login\fonts\iconic\fonts\Material-Design-Iconic-Font.woff2" />
+	  <None Include="wwwroot\lib\login\js\main.js" />
+	  <None Include="wwwroot\lib\login\vendor\jquery\jquery-3.2.1.min.js" />
+	  <None Include="wwwroot\lib\vue\vue.min.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SuperShortLink.Core\SuperShortLink.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="Views\Shared\_Layout.cshtml">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\lib\dashoboard-ui\css\" />
+	</ItemGroup>
+
+	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
+</Project>

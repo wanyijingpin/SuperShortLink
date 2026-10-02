@@ -1,0 +1,285 @@
+﻿@{
+    ViewData["Title"] = "记录列表";
+}
+
+<div class="text-center" id="main">
+    <el-card>
+        <el-row>
+            <el-col :span="24">
+                <el-form inline :model="query" size="small " :loading="loading" class="text-left" label-width="80px">
+                    <el-form-item label="短链接">
+                        <el-input v-model="query.short_url" placeholder="请输入短链接" @@keyup.enter.native="fetchData" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="原始链接">
+                        <el-input v-model="query.origin_url" placeholder="请输入原始链接" @@keyup.enter.native="fetchData" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="备注">
+                        <el-input v-model="query.remark" placeholder="请输入备注" @@keyup.enter.native="fetchData" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="分组">
+                        <el-input v-model="query.group_name" placeholder="请输入分组" @@keyup.enter.native="fetchData" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="状态">
+                        <el-select v-model="query.status" placeholder="全部" clearable style="width:120px">
+                            <el-option label="启用" :value="1"></el-option>
+                            <el-option label="停用" :value="0"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @@click="fetchData" :loading="loading">查询</el-button>
+                        <el-button @@click="handleClear" plain :loading="loading">清空</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
+
+        <div style="margin-bottom:12px;text-align:left">
+            <el-button type="primary" size="small" icon="el-icon-edit" @@click="openBatchEdit" :disabled="selected.length === 0" :loading="loading">批量编辑备注/分组</el-button>
+            <el-button type="success" size="small" icon="el-icon-video-play" @@click="updateStatus(selected.map(x => x.id), 1)" :disabled="selected.length === 0" :loading="loading">批量启用</el-button>
+            <el-button type="danger" size="small" icon="el-icon-video-pause" @@click="updateStatus(selected.map(x => x.id), 0)" :disabled="selected.length === 0" :loading="loading">批量停用</el-button>
+            <el-button type="warning" size="small" icon="el-icon-refresh" @@click="reviewSafety" :disabled="selected.length === 0" :loading="loading">重新安全检测</el-button>
+        </div>
+        <el-table :data="tableData.results" border :loading="loading" stripe
+                  @@selection-change="handleSelectionChange"
+                  style="width: 100%">
+            <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column prop="origin_url"
+                             width="500"
+                             label="原始链接">
+                <template slot-scope="scope">
+                    <el-link size="mini" :href="scope.row.origin_url" type="primary" target="_blank">{{scope.row.origin_url}}</el-link>
+                </template>
+            </el-table-column>
+            <el-table-column prop="remark" label="备注" min-width="160"></el-table-column>
+            <el-table-column prop="group_name" label="分组" width="140"></el-table-column>
+            <el-table-column prop="status" label="状态" width="90" align="center">
+                <template slot-scope="scope">
+                    <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">{{scope.row.status === 1 ? '启用' : '停用'}}</el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column prop="status_reason" label="状态原因" min-width="180"></el-table-column>
+            <el-table-column prop="short_url"
+                             align="center"
+                             width="400"
+                             label="短链接">
+                <template slot-scope="scope">
+                    <el-link size="mini" :href="`${window.location.origin}/${scope.row.short_url}`" type="primary" target="_blank">{{window.location.origin}}/{{scope.row.short_url}}</el-link>
+                </template>
+            </el-table-column>
+            <el-table-column prop="access_count"
+                             label="访问次数"
+                             width="100"
+                             align="center">
+            </el-table-column>
+            <el-table-column prop="update_time"
+                             label="更新时间"
+                             width="160"
+                             align="center">
+            </el-table-column>
+            <el-table-column prop="create_time"
+                             label="创建时间"
+                             width="160"
+                             align="center">
+            </el-table-column>
+            <el-table-column prop="review_time" label="检测时间" width="160" align="center"></el-table-column>
+            <el-table-column label="操作" width="100" fixed="right" align="center">
+                <template slot-scope="scope">
+                    <el-button v-if="scope.row.status === 1" type="text" style="color:#f56c6c" @@click="updateStatus([scope.row.id], 0)">停用</el-button>
+                    <el-button v-else type="text" style="color:#67c23a" @@click="updateStatus([scope.row.id], 1)">启用</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <div class="text-right mt-2">
+            <el-pagination @@size-change="handleSizeChange"
+                           @@current-change="handleCurrentChange"
+                           :current-page.sync="query.page_index"
+                           :page-size.sync="query.page_size"
+                           :page-sizes="pageCfg.pageSizes"
+                           :hide-on-single-page="true"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="tableData.total">
+            </el-pagination>
+        </div>
+    </el-card>
+
+    <el-dialog title="请求记录" :visible.sync="requestApi.visible" width="60%">
+        <el-table :data="requestApi.results" border max-height="250">
+            <el-table-column prop="req_id"
+                             label="请求id">
+            </el-table-column>
+            <el-table-column prop="page_index"
+                             label="页码">
+            </el-table-column>
+
+            <el-table-column prop="res_count"
+                             label="返回条数">
+            </el-table-column>
+
+            <el-table-column prop="res_code"
+                             label="返回状态码">
+            </el-table-column>
+
+            <el-table-column prop="res_message"
+                             label="返回Msg">
+            </el-table-column>
+
+            <el-table-column prop="exec_time"
+                             label="请求耗时">
+                <template slot-scope="scope">
+                    <span>{{scope.row.exec_time/1000}}s</span>
+                    <br />
+                </template>
+            </el-table-column>
+
+            <el-table-column prop="create_time"
+                             width="180"
+                             label="创建时间">
+            </el-table-column>
+        </el-table>
+    </el-dialog>
+
+    <el-dialog title="批量编辑备注/分组" :visible.sync="batchEdit.visible" width="420px">
+        <el-input v-model="batchEdit.remark" placeholder="备注，留空表示清空"></el-input>
+        <el-input v-model="batchEdit.group_name" placeholder="分组，留空表示清空" style="margin-top:12px"></el-input>
+        <div slot="footer">
+            <el-button @@click="batchEdit.visible = false">取消</el-button>
+            <el-button type="primary" @@click="saveBatchEdit" :loading="loading">保存</el-button>
+        </div>
+    </el-dialog>
+</div>
+@section Scripts
+    {
+<script>
+    let app = new Vue({
+        el: "#main",
+        data() {
+            return {
+                loading: false,
+                drawer: false,
+                pageCfg: {
+                    pageSizes: [10, 20, 50, 100, 200, 300, 400]
+                },
+                query: {
+                    page_size: 10,
+                    page_index: 1
+                },
+                    tableData: {
+                    results: [],
+                    total: 0
+                    },
+                    selected: [],
+                    batchEdit: { visible: false, remark: '', group_name: '' },
+                tagCalPanel: {
+                    title: '',
+                    rowData: {}
+                },
+                requestApi: {
+                    visible: false,
+                    results: []
+                }
+            }
+        },
+        mounted() {
+
+        },
+        created() {
+            console.log("init!");
+            let _query = sessionStorage.getItem('_query');
+            if (_query) {
+                let obj = JSON.parse(_query);
+                this.query.page_index = Number(obj.page_index);
+                this.query.page_size = obj.page_size;
+                this.query = obj;
+            }
+            this.fetchData();
+        },
+            methods: {
+                handleSelectionChange(rows) { this.selected = rows; },
+                openBatchEdit() { this.batchEdit.visible = true; },
+                saveBatchEdit() {
+                    this.loading = true;
+                    axios.post('/Home/BatchUpdateMetadata', {
+                        ids: this.selected.map(x => x.id),
+                        remark: this.batchEdit.remark,
+                        group_name: this.batchEdit.group_name
+                    }).then(() => {
+                        this.loading = false;
+                        this.batchEdit.visible = false;
+                        this.selected = [];
+                        this.fetchData();
+                        this.$notify({ message: '批量更新成功', type: 'success' });
+                    }).catch(() => {
+                        this.loading = false;
+                        this.$notify({ message: '批量更新失败', type: 'error' });
+                    });
+                },
+                updateStatus(ids, status) {
+                    const action = status === 1 ? '启用' : '停用';
+                    this.$confirm(`确定${action}选中的 ${ids.length} 条短链吗？`, '状态确认', {
+                        type: status === 1 ? 'info' : 'warning'
+                    }).then(() => {
+                        this.loading = true;
+                        return axios.post('/Home/BatchUpdateStatus', { ids: ids, status: status });
+                    }).then(res => {
+                        this.loading = false;
+                        this.selected = [];
+                        this.fetchData();
+                        this.$notify({ message: `${action}成功，共更新 ${res.data.updated} 条`, type: 'success' });
+                    }).catch(err => {
+                        this.loading = false;
+                        if (err !== 'cancel' && err !== 'close') {
+                            this.$notify({ message: `${action}失败`, type: 'error' });
+                        }
+                    });
+                },
+                reviewSafety() {
+                    this.loading = true;
+                    axios.post('/Home/BatchReviewSafety', { ids: this.selected.map(x => x.id) }).then(res => {
+                        this.loading = false;
+                        this.selected = [];
+                        this.fetchData();
+                        this.$notify({
+                            message: `已检测 ${res.data.checked_count} 条，自动停用 ${res.data.disabled_count} 条`,
+                            type: res.data.disabled_count > 0 ? 'warning' : 'success'
+                        });
+                    }).catch(() => {
+                        this.loading = false;
+                        this.$notify({ message: '安全检测失败', type: 'error' });
+                    });
+                },
+            handleClear() {
+                this.query = {
+                    page_size: 10,
+                    page_index: 1
+                }
+                this.fetchData();
+            },
+            handleSizeChange(val) {
+                this.query.page_size = val;
+                this.fetchData();
+            },
+            handleCurrentChange(val) {
+                this.query.page_index = val;
+                this.fetchData();
+            },
+            fetchData() {
+                sessionStorage.setItem("_query", JSON.stringify(this.query));
+                this.loading = true;
+                axios.post("/home/List", this.query).then(res => {
+                    this.tableData = res.data.pageData;
+                    console.log(this.tableData);
+                    this.taskStatus = res.data.taskStatusDic;
+                    // this.taskTypes = res.data.taskTypes;
+                    this.loading = false;
+                }).catch(err => {
+                    this.loading = false;
+                    this.$notify({
+                        message: "请求失败，请检查输入",
+                        type: 'warning'
+                    });
+                });
+            }
+        }
+    })
+</script>
+}

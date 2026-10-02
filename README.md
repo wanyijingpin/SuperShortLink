@@ -1,0 +1,140 @@
+> **项目出处与版权说明**：本仓库是 [Bryan-Cyf/SuperShortLink](https://github.com/Bryan-Cyf/SuperShortLink) 的修改版，原作者 Bryan，基于上游提交 `4f9c3b0`。原项目采用 MIT License；本仓库保留原作者的 [LICENSE](LICENSE) 版权与许可文本。请勿将本项目误认为原创项目或上游官方版本。
+>
+> 本修改版增加了 MySQL 本地与 Docker Compose 部署、批量短链、URL 安全校验及复查、管理员密码修改等功能。具体部署说明见 [LOCAL_AND_SERVER_SETUP.md](LOCAL_AND_SERVER_SETUP.md)。随仓库保留的前端库、字体及图片来自上游仓库；第三方组件的权利不因本仓库的 MIT 许可证而改变，详见 [第三方资源说明](THIRD_PARTY_NOTICES.md)。
+
+<p align="center">
+    <a href="https://github.com/Bryan-Cyf/SuperShortLink" target="_blank" rel="noopener noreferrer">
+        <img width="100" src="https://github.com/Bryan-Cyf/SuperShortLink/blob/master/media/nuget-icon.png" alt="SuperShortLink logo" />
+    </a>
+</p>
+
+<p align="center"><b>SuperShortLink</b>强大易用的短链生成及监控系统</p>
+
+<p align="center">
+<a href="https://www.nuget.org/packages/SuperShortLink.Core"><img alt="nuget release" src="https://img.shields.io/nuget/v/SuperShortLink.Core" /></a>
+<a href="https://www.nuget.org/packages/SuperShortLink.Core"><img alt="nuget release" src="https://img.shields.io/nuget/dt/SuperShortLink.Core" /></a>
+<br />
+<a href="https://chenyuefeng.blog.csdn.net/article/details/130222045">快速开始</a>
+<a href="https://chenyuefeng.blog.csdn.net/article/details/130194794">设计原理</a>
+
+</p>
+
+-----------
+
+# `SuperShortLink`
+> 这是一个基于.NET开源的短链生成及监控系统，它包含了在线生成短链、短链跳转长链、支持短链访问次数以及Web监控页面，可以帮助我们更容易地生成短链、监控短链！
+
+
+-----------
+## Nuget包
+
+| Package Name |  Version | Downloads
+|--------------|  ------- | ----
+| SuperShortLink.Core | [![NuGet](https://img.shields.io/nuget/v/SuperShortLink.Core)](https://www.nuget.org/packages/SuperShortLink.Core) | [![NuGet](https://img.shields.io/nuget/dt/SuperShortLink.Core)](https://www.nuget.org/packages/SuperShortLink.Core)|
+| SuperShortLink.Api | [![NuGet](https://img.shields.io/nuget/v/SuperShortLink.Api)](https://www.nuget.org/packages/SuperShortLink.Api) | [![NuGet](https://img.shields.io/nuget/dt/SuperShortLink.Api)](https://www.nuget.org/packages/SuperShortLink.Api)|
+
+---------
+
+
+## 功能介绍
+- [x] 基于.NET 6开发的后端及Web管理界面
+- [x] 支持自定义短链长度
+- [x] 支持在线短链生成及跳转长链
+- [x] 支持实时统计短链访问次数
+- [x] 支持短链备注、分组及批量编辑
+- [x] 支持一行一个长链接的批量生成
+- [x] 支持发布前 URL 安全策略校验
+- [x] 支持多种持久化方式：MySQL/PostgreSQL/SqlServer(2012及以上)
+- [x] 傻瓜式配置，开箱即用
+
+-----------
+
+## 文档
+
+本仓库的本地安装、启停以及 Docker Compose 服务器部署步骤见
+[LOCAL_AND_SERVER_SETUP.md](LOCAL_AND_SERVER_SETUP.md)。
+
+
+1. 快速开始：项目的运行及接入
+### [快速开始](https://chenyuefeng.blog.csdn.net/article/details/130222045)
+
+
+2. 架构设计及原理：项目的整体架构设计，加解密混淆算法原理
+### [项目架构设计及算法详解文档](https://chenyuefeng.blog.csdn.net/article/details/130194794)
+
+----------
+
+## Web界面
+- 登录页
+
+![](media/web-login.png?raw=true)
+
+- 首页Dashboard
+
+![](media/web-generate.png?raw=true)
+
+- 列表页
+
+![](media/web-list.png?raw=true)
+
+- 应用列表页
+
+![](media/web-application-create.png?raw=true)
+![](media/web-application-list.png?raw=true)
+![](media/web-application-dashboard.png?raw=true)
+
+-----------
+
+## 更多示例
+
+1. 查看 [使用例子](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/src)
+2. 查看 [测试用例](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/test)
+
+----------
+## 短URL生成原理：混淆自增算法详解
+
+- 标准Base64编码表如下：
+
+![](media/content-base64.png?raw=true)
+
+
+其中“+”和“/”在 URL 中会被编码为“%2B”以及“%2F”，需要进行再编码，因此直接使用标准 Base64 编码进行短URL 编码并不合适，所以，我们需要针对 URL 场景对 Base64 编码进行改造，Base64 编码表中的 62，63 进行编码移除，更新为Base62编码
+
+### 混淆加密算法设计
+
+![](media/content-encryption.png?raw=true)
+
+1. 将标准编码随机打乱 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+
+> 举例：打乱成：s9LFkgy5RovixI1aOf8UhdY3r4DMplQZJXPqebE0WSjBn7wVzmN2Gc6THCAKhaut
+
+2. 6位长度标准编码与打乱后编码的对应关系
+   | 计数器自增Id | 标准Base62编码 | 标准Base62编码（6位字符） | 打乱后Base62编码 | 打乱后Base62编码（6位字符） |
+   | --- | --- | --- | --- | --- |
+   | 6 | G | AAAAAG | y | sssssy |
+   | 66 | BE | AAAABE | 9k | ssss9k |
+   | 100 | Bm | AAAABm | 9E | ssss9E |
+
+> 可以看出，虽然打乱了，但还顺序性还是很明显
+
+3. 将前面补0再倒转，由于6位长度最大11位，为了避免倒转后超过该数值，因此补到10位
+
+   | 计数器自增Id | 打乱后Base62编码（6位字符） | 前面补0到10位 | 倒转数字 | 倒转后的打乱Base62编码（6位字符） |
+   | --- | --- | --- | --- | --- |
+   | 6 | sssssy | 0000000006 | 6000000000 | yPFrgP |
+   | 66 | ssss9k | 0000000066 | 6600000000 | 5xWCQH |
+   | 100 | ssss9E | 0000000100 | 10000000 | ssSKph |
+
+### 恢复混淆解密算法设计
+
+![](media/content-decryption.png?raw=true)
+将请求收到的短链Key根据打乱后的Base62编码转成十进制数，补0到10位，然后倒转就得到原来的短链Id
+
+| 短链Key | 解析后的十进制数 | 前面补0到10位 | 倒转数字 |
+| ------- | ---------------- | ------------- | -------- |
+| yPFrgP  | 6000000000       | 6000000000    | 6        |
+| 5xWCQH  | 6600000000       | 6600000000    | 66       |
+| ssSKph  | 10000000         | 0010000000    | 100      |
+
+
+---------

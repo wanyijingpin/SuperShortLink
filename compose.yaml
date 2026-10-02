@@ -1,0 +1,55 @@
+services:
+  database:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?Set MYSQL_DATABASE in .env}
+      MYSQL_USER: ${MYSQL_USER:?Set MYSQL_USER in .env}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./build/mysql_init.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  app:
+    build:
+      context: .
+      dockerfile: src/SuperShortLink/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      ShortLink__DbType: MySQL
+      ShortLink__ConnectionString: Server=database;Port=3306;User Id=${MYSQL_USER};Password=${MYSQL_PASSWORD};Database=${MYSQL_DATABASE};SslMode=None;AllowPublicKeyRetrieval=True;
+      ShortLink__LoginAcount: ${ADMIN_USER:?Set ADMIN_USER in .env}
+      ShortLink__LoginPassword: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in .env}
+      AdminCredentialPath: /app-data/admin-password.hash
+      ShortLink__Secrect: ${SHORTLINK_SECRET:?Set SHORTLINK_SECRET in .env}
+      ShortLink__UrlSafety__Enabled: ${URL_SAFETY_ENABLED:-true}
+      ShortLink__UrlSafety__ModerationEndpoint: ${URL_MODERATION_ENDPOINT:-}
+      ShortLink__UrlSafety__ModerationApiKey: ${URL_MODERATION_API_KEY:-}
+      ShortLink__UrlSafety__PeriodicReviewEnabled: ${URL_PERIODIC_REVIEW_ENABLED:-true}
+      ShortLink__UrlSafety__ReviewIntervalMinutes: ${URL_REVIEW_INTERVAL_MINUTES:-60}
+      ShortLink__UrlSafety__ReviewBatchSize: ${URL_REVIEW_BATCH_SIZE:-100}
+    ports:
+      - "127.0.0.1:${APP_PORT:-5080}:8080"
+    volumes:
+      - aspnet-data-protection:/root/.aspnet/DataProtection-Keys
+      - admin-credentials:/app-data
+
+volumes:
+  mysql-data:
+  aspnet-data-protection:
+  admin-credentials:

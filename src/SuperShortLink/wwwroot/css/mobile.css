@@ -1,0 +1,34 @@
+/* Narrow-screen layout overrides. Keep data tables scrollable instead of shrinking columns. */
+@media (max-width: 767.98px) {
+    html, body { min-width: 0; overflow-x: hidden; }
+    .page-header { min-height: 56px; height: auto; padding: 0 10px; }
+    .page-header .navbar-brand { width: auto; max-width: 44vw; margin-right: 0; }
+    .page-header .navbar-brand h2 { margin: 0; font-size: 1.15rem; white-space: nowrap; }
+    .page-header .navbar-nav { gap: 0; }
+    .page-header .navbar-nav .nav-item { min-width: auto; margin-right: 2px !important; }
+    .page-header .navbar-nav .btn { padding: .35rem .4rem; font-size: .8rem; }
+    .page-header .sidebar-mobile-toggle { padding: .35rem .5rem; }
+    .content, .sidebar-fixed .content { width: 100%; padding: 14px 10px; margin: 56px 0 0; }
+    .sidebar-fixed .sidebar { margin-top: 56px; }
+    .main-container { min-width: 0; }
+    .card, .tab-content { overflow: hidden; }
+    .el-card__body { padding: 14px !important; }
+    .el-row { margin-left: -5px !important; margin-right: -5px !important; }
+    .el-col { padding-left: 5px !important; padding-right: 5px !important; }
+    .el-form-item { margin-bottom: 14px; }
+    .el-input, .el-textarea, .el-select { width: 100% !important; }
+    .el-button { margin: 3px 2px 3px 0; }
+    .el-dialog { width: calc(100vw - 24px) !important; margin-top: 7vh !important; }
+    .el-dialog__body { padding: 12px 15px 20px; }
+    .el-table { min-width: 820px; }
+    .el-table__body-wrapper, .el-table__header-wrapper { overflow-x: auto; }
+    .el-pagination { white-space: normal; padding: 10px 0; }
+    .el-pagination .el-pagination__sizes { display: none; }
+    .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .table-responsive > table { min-width: 680px; }
+    canvas { max-width: 100% !important; }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .content, .sidebar-fixed .content { padding: 20px; }
+}

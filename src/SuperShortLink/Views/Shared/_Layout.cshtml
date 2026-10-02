@@ -1,0 +1,100 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="@Antiforgery.GetAndStoreTokens(Context).RequestToken" />
+    <title>SuperShortLink</title>
+    <link rel="stylesheet" href="~/lib/bootstrap-v4-rtl/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/element-ui/theme-chalk/index.css" />
+    <link rel="stylesheet" href="~/lib/dashoboard-ui/css/styles.css" />
+    <link rel="stylesheet" href="~/css/mobile.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body class="sidebar-fixed header-fixed">
+    <div class="page-wrapper">
+        <nav class="navbar page-header">
+            <a href="#" class="btn btn-link sidebar-mobile-toggle d-md-none mr-auto">
+                <i class="fa fa-bars"></i>
+            </a>
+            <a class="navbar-brand" href="https://github.com/Bryan-Cyf/SuperShortLink" target="_blank">
+                @*<h2>@ViewData["Brand"]</h2>*@
+                <h2>SuperShortLink</h2>
+            </a>
+            <a href="#" class="btn btn-link sidebar-toggle d-md-down-none">
+                <i class="fa fa-bars"></i>
+            </a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item mr-3">
+                    <a class="btn btn-link" href="/Login/ChangePassword">修改密码</a>
+                </li>
+                <li class="nav-item mr-3">
+                    <form method="post" action="/Login/Logout">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-link">退出</button>
+                    </form>
+                </li>
+                <li class="nav-item d-md-down-none">
+                    <a href="/">
+                        <i class="fa fa-reply-all"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="main-container">
+            <div class="sidebar">
+                <nav class="sidebar-nav">
+                    <ul class="nav">
+                        <li class="nav-title">菜单</li>
+                        <li class="nav-item">
+                            <a id="mapPath" asp-area="" asp-controller="Home" asp-action="Dashboard" class="nav-link">
+                                <i class="el-icon-full-screen"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link">
+                                <i class="el-icon-s-fold"></i> 列表
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Home" asp-action="Application" class="nav-link">
+                                <i class="el-icon-menu"></i> 授权应用
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="content" id="content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/dashoboard-ui/js/jquery.min.js"></script>
+    <script src="~/lib/bootstrap-v4-rtl/js/bootstrap.js"></script>
+    <script src="~/lib/axios/axios.min.js"></script>
+    <script>axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').content;</script>
+    <script src="~/lib/vue/vue.min.js"></script>
+    <script src="~/lib/element-ui/index.js"></script>
+    <script src="~/lib/dashoboard-ui/js/chart.min.js"></script>
+    <script src="~/lib/dashoboard-ui/js/bootstrap.min.js"></script>
+    <script src="~/lib/dashoboard-ui/js/moment.min.js"></script>
+    <script src="~/lib/dashoboard-ui/js/spin.min.js"></script>
+    <script src="~/lib/dashoboard-ui/js/echarts.min.js"></script>
+    <script>
+        document.querySelectorAll('.sidebar-mobile-toggle').forEach(function (toggle) {
+            toggle.addEventListener('click', function (event) {
+                event.preventDefault();
+                document.body.classList.toggle('sidebar-mobile-show');
+            });
+        });
+        document.querySelectorAll('.sidebar .nav-link').forEach(function (link) {
+            link.addEventListener('click', function () {
+                document.body.classList.remove('sidebar-mobile-show');
+            });
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
