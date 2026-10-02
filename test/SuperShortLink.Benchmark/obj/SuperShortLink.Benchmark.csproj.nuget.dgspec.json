@@ -1,0 +1,259 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\test\\SuperShortLink.Benchmark\\SuperShortLink.Benchmark.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\src\\SuperShortLink.Api\\SuperShortLink.Api.csproj": {
+      "version": "1.2.1",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\src\\SuperShortLink.Api\\SuperShortLink.Api.csproj",
+        "projectName": "SuperShortLink.Api",
+        "projectPath": "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\src\\SuperShortLink.Api\\SuperShortLink.Api.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\src\\SuperShortLink.Api\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.Extensions.Options": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.425/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\src\\SuperShortLink.Core\\SuperShortLink.Core.csproj": {
+      "version": "1.2.1",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\src\\SuperShortLink.Core\\SuperShortLink.Core.csproj",
+        "projectName": "SuperShortLink.Core",
+        "projectPath": "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\src\\SuperShortLink.Core\\SuperShortLink.Core.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\src\\SuperShortLink.Core\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Bryan.Tools.HttpCore": {
+              "target": "Package",
+              "version": "[1.0.2, )"
+            },
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.123, )"
+            },
+            "Microsoft.AspNetCore.Http": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.Data.SqlClient": {
+              "target": "Package",
+              "version": "[5.2.2, )"
+            },
+            "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.Http": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.Extensions.Logging.Abstractions": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Microsoft.Extensions.Options": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Microsoft.Extensions.Options.ConfigurationExtensions": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.Options.DataAnnotations": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "MySql.Data": {
+              "target": "Package",
+              "version": "[8.4.0, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[8.0.4, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.425/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\test\\SuperShortLink.Benchmark\\SuperShortLink.Benchmark.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\test\\SuperShortLink.Benchmark\\SuperShortLink.Benchmark.csproj",
+        "projectName": "SuperShortLink.Benchmark",
+        "projectPath": "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\test\\SuperShortLink.Benchmark\\SuperShortLink.Benchmark.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\test\\SuperShortLink.Benchmark\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\src\\SuperShortLink.Api\\SuperShortLink.Api.csproj": {
+                "projectPath": "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\src\\SuperShortLink.Api\\SuperShortLink.Api.csproj"
+              },
+              "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\src\\SuperShortLink.Core\\SuperShortLink.Core.csproj": {
+                "projectPath": "C:\\Users\\Administrator\\Documents\\ChatGPT\\AI注册机\\SuperShortLink\\src\\SuperShortLink.Core\\SuperShortLink.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "BenchmarkDotNet": {
+              "target": "Package",
+              "version": "[0.13.5, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.425/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

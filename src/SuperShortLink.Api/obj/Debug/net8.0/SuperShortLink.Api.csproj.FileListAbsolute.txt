@@ -1,0 +1,13 @@
+C:\Users\Administrator\Documents\ChatGPT\AI注册机\SuperShortLink\src\SuperShortLink.Api\bin\Debug\net8.0\SuperShortLink.Api.deps.json
+C:\Users\Administrator\Documents\ChatGPT\AI注册机\SuperShortLink\src\SuperShortLink.Api\bin\Debug\net8.0\SuperShortLink.Api.dll
+C:\Users\Administrator\Documents\ChatGPT\AI注册机\SuperShortLink\src\SuperShortLink.Api\bin\Debug\net8.0\SuperShortLink.Api.pdb
+C:\Users\Administrator\Documents\ChatGPT\AI注册机\SuperShortLink\src\SuperShortLink.Api\obj\Debug\net8.0\SuperShortLink.Api.csproj.AssemblyReference.cache
+C:\Users\Administrator\Documents\ChatGPT\AI注册机\SuperShortLink\src\SuperShortLink.Api\obj\Debug\net8.0\SuperShortLink.Api.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Administrator\Documents\ChatGPT\AI注册机\SuperShortLink\src\SuperShortLink.Api\obj\Debug\net8.0\SuperShortLink.Api.AssemblyInfoInputs.cache
+C:\Users\Administrator\Documents\ChatGPT\AI注册机\SuperShortLink\src\SuperShortLink.Api\obj\Debug\net8.0\SuperShortLink.Api.AssemblyInfo.cs
+C:\Users\Administrator\Documents\ChatGPT\AI注册机\SuperShortLink\src\SuperShortLink.Api\obj\Debug\net8.0\SuperShortLink.Api.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\Documents\ChatGPT\AI注册机\SuperShortLink\src\SuperShortLink.Api\obj\Debug\net8.0\SuperShortLink.Api.sourcelink.json
+C:\Users\Administrator\Documents\ChatGPT\AI注册机\SuperShortLink\src\SuperShortLink.Api\obj\Debug\net8.0\SuperShortLink.Api.dll
+C:\Users\Administrator\Documents\ChatGPT\AI注册机\SuperShortLink\src\SuperShortLink.Api\obj\Debug\net8.0\refint\SuperShortLink.Api.dll
+C:\Users\Administrator\Documents\ChatGPT\AI注册机\SuperShortLink\src\SuperShortLink.Api\obj\Debug\net8.0\SuperShortLink.Api.pdb
+C:\Users\Administrator\Documents\ChatGPT\AI注册机\SuperShortLink\src\SuperShortLink.Api\obj\Debug\net8.0\ref\SuperShortLink.Api.dll
