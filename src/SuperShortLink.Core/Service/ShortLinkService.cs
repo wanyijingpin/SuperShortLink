@@ -80,30 +80,52 @@ namespace SuperShortLink
 
         public async Task<IReadOnlyList<BatchGenerateResult>> GenerateBatchAsync(string urls, string remark = "", string groupName = "")
         {
-            var lines = (urls ?? string.Empty).Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None)
-                .Select((url, index) => new { Url = url.Trim(), Line = index + 1 })
-                .Where(x => x.Url.Length > 0)
-                .ToList();
-            if (lines.Count > _urlSafetyOptions.MaxBatchSize)
+            IReadOnlyList<BatchInputLine> lines;
+            try
             {
-                return new[] { new BatchGenerateResult { line = 0, success = false, message = $"单次最多生成 {_urlSafetyOptions.MaxBatchSize} 条链接" } };
+                lines = BatchInputParser.Parse(urls, _urlSafetyOptions.MaxBatchSize);
+            }
+            catch (FormatException ex)
+            {
+                return new[] { new BatchGenerateResult { line = 0, success = false, message = ex.Message } };
+            }
+
+            if (lines.Count == 0)
+            {
+                return new[]
+                {
+                    new BatchGenerateResult
+                    {
+                        line = 0,
+                        success = false,
+                        message = "请至少输入一条链接"
+                    }
+                };
             }
 
             var results = new List<BatchGenerateResult>(lines.Count);
             foreach (var line in lines)
             {
-                var result = await GenerateWithResultAsync(line.Url, remark, groupName);
+                var effectiveRemark = string.IsNullOrWhiteSpace(line.remark) ? remark : line.remark;
+                var result = await GenerateWithResultAsync(line.url, effectiveRemark, groupName);
+                var outputText = result.success ? UrlPatternReplace(line.source_text, line.url, result.short_url) : line.source_text;
                 results.Add(new BatchGenerateResult
                 {
-                    line = line.Line,
-                    origin_url = line.Url,
+                    line = line.line,
+                    source_text = line.source_text,
+                    origin_url = line.url,
                     short_url = result.short_url,
+                    remark = effectiveRemark,
+                    output_text = outputText,
                     success = result.success,
                     message = result.success ? "生成成功" : result.message
                 });
             }
             return results;
         }
+
+        private static string UrlPatternReplace(string source, string url, string shortUrl)
+            => source.Replace(url, shortUrl, StringComparison.Ordinal);
 
         public async Task<int> UpdateMetadataAsync(IEnumerable<int> ids, string remark, string groupName)
         {

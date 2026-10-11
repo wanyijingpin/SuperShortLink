@@ -46,6 +46,11 @@ namespace SuperShortLink
         [HttpPost]
         public async Task<IActionResult> BatchGenerate([FromBody] BatchGenerateRequest request)
         {
+            if (request == null)
+            {
+                return BadRequest(new { success = false, message = "请求不能为空" });
+            }
+
             var result = await _shortLinkService.GenerateBatchAsync(request.urls, request.remark, request.group_name);
             return base.Json(result);
         }

@@ -13,16 +13,33 @@
                 <el-col :span="10"><el-input v-model="query.group_name" placeholder="分组（可选）"></el-input></el-col>
             </el-row>
             <el-divider content-position="left">批量生成</el-divider>
-            <el-input type="textarea" :rows="8" v-model="batch.urls" placeholder="一行一个长链接，最多 200 行"></el-input>
+            <el-input type="textarea" :rows="8" v-model="batch.urls" placeholder="每行一个链接；可写成：活动A https://example.com/a"></el-input>
             <el-button type="primary" style="margin-top:10px" icon="el-icon-s-operation" @@click="generateBatch" :loading="loading">一键批量生成</el-button>
+            <el-button v-if="batch.successResults.length" type="success" style="margin-top:10px" icon="el-icon-document-copy" @@click="copyAllBatch">复制全部结果</el-button>
+            <el-input v-if="batch.successResults.length" class="batch-copy-output" type="textarea" :rows="Math.min(8, batch.successResults.length + 1)" v-model="batch.outputText" readonly style="margin-top:15px"></el-input>
             <el-table v-if="batch.results.length" :data="batch.results" border stripe style="margin-top:15px;width:100%">
                 <el-table-column prop="line" label="行号" width="70"></el-table-column>
-                <el-table-column prop="origin_url" label="原始链接" min-width="280"></el-table-column>
-                <el-table-column prop="short_url" label="短码" width="130"></el-table-column>
+                <el-table-column prop="source_text" label="原文" min-width="280"></el-table-column>
+                <el-table-column prop="remark" label="备注" min-width="150"></el-table-column>
+                <el-table-column label="短链接" min-width="180">
+                    <template slot-scope="scope">
+                        <el-link v-if="scope.row.success" type="primary" :href="batchShortUrl(scope.row)" target="_blank">{{batchShortUrl(scope.row)}}</el-link>
+                    </template>
+                </el-table-column>
+                <el-table-column label="复制内容" min-width="280">
+                    <template slot-scope="scope">{{batchOutputText(scope.row)}}</template>
+                </el-table-column>
+                <el-table-column label="复制" width="100" fixed="right">
+                    <template slot-scope="scope">
+                        <el-button v-if="scope.row.success" size="mini" type="primary" icon="el-icon-document-copy" @@click="copyBatchRow(scope.row)">复制</el-button>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="message" label="结果" width="220"></el-table-column>
             </el-table>
             <div style="margin-top:10px">
-                <p>短网址：<el-link type="primary" :href="shortUrl" target="_blank">{{shortUrl}}</el-link></p>
+                <p>短网址：<el-link type="primary" :href="shortUrl" target="_blank">{{shortUrl}}</el-link>
+                    <el-button v-if="shortUrl" size="mini" type="primary" icon="el-icon-document-copy" @@click="copySingle">复制</el-button>
+                </p>
                 <p>原网址：<el-link type="primary" :href="originUrl" target="_blank">{{originUrl}}</el-link></p>
             </div>
         </div>
@@ -82,7 +99,7 @@
                         remark: '',
                         group_name: ''
                     },
-                    batch: { urls: '', results: [] },
+                    batch: { urls: '', results: [], outputText: '', successResults: [] },
                     chartQuery: {
                         ChartDataType: 0
                     },
@@ -123,11 +140,56 @@
                     this.loading = true;
                     axios.post("/Home/BatchGenerate", this.batch).then(res => {
                         this.batch.results = res.data;
+                        this.batch.successResults = this.batch.results.filter(item => item.success);
+                        this.batch.outputText = this.batch.successResults.map(item => this.batchOutputText(item)).join("\n");
+                        const error = this.batch.results.find(item => !item.success);
+                        if (error) {
+                            this.$notify({ message: error.message || "批量输入格式不正确", type: 'warning' });
+                        }
                         this.loading = false;
                     }).catch(err => {
                         this.loading = false;
                         this.$notify({ message: err.response?.data?.message || "批量生成失败", type: 'warning' });
                     });
+                },
+                copySingle() {
+                    const text = this.query.remark ? `${this.query.remark} ${this.shortUrl}` : this.shortUrl;
+                    this.copyText(text);
+                },
+                copyBatchRow(row) {
+                    this.copyText(this.batchOutputText(row));
+                },
+                copyAllBatch() {
+                    this.copyText(this.batch.successResults.map(row => this.batchOutputText(row)).join("\n"));
+                },
+                batchShortUrl(row) {
+                    if (!row || !row.short_url) return '';
+                    return `${window.location.origin}/${row.short_url}`;
+                },
+                batchOutputText(row) {
+                    if (!row) return '';
+                    const output = row.output_text || row.short_url || '';
+                    return row.short_url
+                        ? output.split(row.short_url).join(this.batchShortUrl(row))
+                        : output;
+                },
+                copyText(text) {
+                    if (!text) return;
+                    const fallback = () => {
+                        const input = document.createElement('textarea');
+                        input.value = text;
+                        input.setAttribute('readonly', '');
+                        input.style.position = 'fixed';
+                        input.style.opacity = '0';
+                        document.body.appendChild(input);
+                        input.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(input);
+                    };
+                    const copied = navigator.clipboard && window.isSecureContext
+                        ? navigator.clipboard.writeText(text).catch(fallback)
+                        : Promise.resolve(fallback());
+                    copied.then(() => this.$notify({ message: '已复制到剪贴板', type: 'success' }));
                 },
                 getChart(i) {
                     this.chartQuery.ChartDataType = i - 1;
